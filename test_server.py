@@ -1,8 +1,4 @@
-# Test cases can be run with:
-# nosetests
-# coverage report -m
-
-""" Test cases for the Pet Service """
+""" Test cases for the Product Model """
 
 import logging
 import unittest
