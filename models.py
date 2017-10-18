@@ -31,7 +31,7 @@ class Product(object):
         if self.id == 0:
             self.id = self.__next_index()
             Product.data.append(self)
-            print Product.data[-1].id
+            # print Product.data[-1].id
         else:
             for i in range(len(Product.data)):
                 if Product.data[i].id == self.id:
