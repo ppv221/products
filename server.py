@@ -68,6 +68,7 @@ def list_product():
     """ Retrieves a list of products from the database """
     results = []
     category = request.args.get('category')
+    #print category
     name = request.args.get('name')
     if category:
         results = Product.find_by_category(category)
@@ -112,9 +113,11 @@ def get_products(id):
 @app.route('/Products', methods=['POST'])
 def create_product():
     """ Creates a Product in the datbase from the posted database """
-    payload = request.get_json()
+    payload = request.get_json(force=True)
     product = Product()
+    #print payload
     product.deserialize(payload)
+    #print (product.id,product.name)
     product.save()
     message = product.serialize()
     response = make_response(jsonify(message), HTTP_201_CREATED)
