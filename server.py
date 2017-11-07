@@ -3,7 +3,7 @@ import csv
 import logging
 from flask import Flask, Response, jsonify, request, json, url_for, make_response
 from models import Product, DataValidationError
-import mock
+#import mock
 
 # Pull options from environment
 DEBUG = (os.getenv('DEBUG', 'False') == 'True')
@@ -55,10 +55,11 @@ def internal_server_error(error):
 ######################################################################
 @app.route('/')
 def index():
-    """ Return something useful by default """
+    """ Return something useful by default 
     return jsonify(name='Product Demo REST API Service',
                    version='1.0',
-                   url=url_for('list_product', _external=True)), HTTP_200_OK
+                   url=url_for('list_product', _external=True)), HTTP_200_OK"""
+    return app.send_static_file('index.html')
 
 ######################################################################
 # LIST ALL products
@@ -77,7 +78,7 @@ def list_product():
     else:
         results = Product.all()
 
-    return jsonify([p.serialize() for p in results]), HTTP_200_OK
+    return make_response(jsonify([p.serialize() for p in results]), HTTP_200_OK)
 
 ######################################################################
 # LIST AVAILABLE Products
@@ -87,7 +88,7 @@ def list_available_products():
     """ Retrieves a list of available products from the database """
     results = []
     results = Product.available()
-    return jsonify([p.serialize() for p in results]), HTTP_200_OK
+    return make_response(jsonify([p.serialize() for p in results]), HTTP_200_OK)
 
 ######################################################################
 # RETRIEVE A PRODUCT
@@ -105,7 +106,7 @@ def get_products(id):
         message = {'error' : 'Product with id: %s was not found' % str(id)}
         return_code = HTTP_404_NOT_FOUND
 
-    return jsonify(message), return_code
+    return make_response(jsonify(message), return_code)
 
 ######################################################################
 # ADD A NEW PRODUCT
@@ -141,7 +142,7 @@ def update_products(id):
         message = {'error' : 'Product with id: %s was not found' % str(id)}
         return_code = HTTP_404_NOT_FOUND
 
-    return jsonify(message), return_code
+    return make_response(jsonify(message), return_code)
 
 @app.route('/Products/add_unit/<int:id>', methods=['PUT'])
 def add_product_unit(id):
@@ -155,7 +156,7 @@ def add_product_unit(id):
         message = {'error' : 'Product with id: %s was not found' % str(id)}
         return_code = HTTP_404_NOT_FOUND
 
-    return jsonify(message), return_code
+    return make_response(jsonify(message), return_code)
 
 @app.route('/Products/sell_products/<int:id>', methods=['PUT'])
 def sell_products(id):
@@ -173,7 +174,7 @@ def sell_products(id):
         message = {'error' : 'Product with id: %s was not found' % str(id)}
         return_code = HTTP_404_NOT_FOUND
 
-    return jsonify(message), return_code
+    return make_response(jsonify(message), return_code)
 
 ######################################################################
 # DELETE A Product
@@ -201,9 +202,9 @@ def get_product_data():
 ######################################################################
 if __name__ == "__main__":
     # dummy data for testing
-    # Product(0, 'Asus2500', 'Laptop', '234', 'qerwrw', 'erwwfwf').save()
-    # Product(0, 'GE4509', 'Microwave','34324', 'wewef', 'fwfwsxdws' ).save()
-    get_product_data()
-    app.run(host='0.0.0.0',debug=False)
+    Product(0, 'Asus2500', 'Laptop', '234', 'qerwrw', 'erwwfwf').save()
+    Product(0, 'GE4509', 'Microwave','34324', 'wewef', 'fwfwsxdws' ).save()
+    #get_product_data()
+    app.run(host='0.0.0.0',port=int(PORT), debug=DEBUG)
     #port = int(os.environ.get('PORT', 5000))
     #socketio.run(app, host='0.0.0.0', port=port)
