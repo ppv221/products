@@ -3,9 +3,24 @@
 # coverage report -m
 
 """ Test cases for Product Model """
-
+import os
+import json
 import unittest
+from mock import patch
+from redis import Redis, ConnectionError
 from models import Product, DataValidationError
+
+
+VCAP_SERVICES = {
+    'Redis Cloud-rn': [
+        {'credentials': {
+            'password': '',
+            'hostname': '127.0.0.1',
+            'port': '6379'
+            }
+        }
+    ]
+}
 
 ######################################################################
 #  T E S T   C A S E S
@@ -14,6 +29,8 @@ class TestProduct(unittest.TestCase):
     """ Test Cases for Products """
 
     def setUp(self):
+        """ Initialize the db"""
+        Product.init_db()
         Product.remove_all()
 
     def test_create_a_product(self):
@@ -161,6 +178,30 @@ class TestProduct(unittest.TestCase):
         self.assertEqual(len(products), 1)
         self.assertEqual(products[0].category, "Laptop")
         self.assertEqual(products[0].name, "Asus2500")
+
+
+    def test_passing_connection(self):
+        """ Pass in the Redis connection """
+        Product.init_db(Redis(host='127.0.0.1', port=6379))
+        self.assertIsNotNone(Product.redis)
+
+    def test_passing_bad_connection(self):
+        """ Pass in a bad Redis connection """
+        self.assertRaises(ConnectionError, Product.init_db, Redis(host='127.0.0.1', port=6300))
+        self.assertIsNone(Product.redis)
+
+    @patch.dict(os.environ, {'VCAP_SERVICES': json.dumps(VCAP_SERVICES)})
+    def test_vcap_services(self):
+        """ Test if VCAP_SERVICES works """
+        Product.init_db()
+        self.assertIsNotNone(Product.redis)
+
+    @patch('redis.Redis.ping')
+    def test_redis_connection_error(self, ping_error_mock):
+        """ Test a Bad Redis connection """
+        ping_error_mock.side_effect = ConnectionError()
+        self.assertRaises(ConnectionError, Product.init_db)
+        self.assertIsNone(Product.redis)
 
 
 ######################################################################
