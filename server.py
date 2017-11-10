@@ -228,7 +228,7 @@ def get_product_data():
 if __name__ == "__main__":
     # dummy data for testing
     Product(0, 'Asus2500', 'Laptop', '299', 'In Great Condition', 'Black',10).save()
-    Product(1, 'GE4509', 'Microwave','50', 'Working', 'Red',20 ).save()
+    Product(0, 'GE4509', 'Microwave','50', 'Working', 'Red',20 ).save()
     #get_product_data()
     app.run(host='0.0.0.0',port=int(PORT), debug=DEBUG)
     #port = int(os.environ.get('PORT', 5000))
