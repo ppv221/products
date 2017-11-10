@@ -3,7 +3,7 @@ import csv
 import logging
 from flask import Flask, Response, jsonify, request, json, url_for, make_response
 from models import Product, DataValidationError
-#import mock
+import sys
 
 # Pull options from environment
 DEBUG = (os.getenv('DEBUG', 'False') == 'True')
@@ -33,23 +33,29 @@ def bad_request(error):
     """ Handles requests that have bad or malformed data """
     return jsonify(status=400, error='Bad Request', message=error.message), 400
 
-# @app.errorhandler(404)
-# def not_found(error):
-#     """ Handles Products that cannot be found """
-#     return jsonify(status=404, error='Not Found', message=error.message), 404
-#
-# @app.errorhandler(405)
-# def method_not_supported(error):
-#     """ Handles bad method calls """
-#     return jsonify(status=405, error='Method not Allowed',
-#                    message='Your request method is not supported.' \
-#                    ' Check your HTTP method and try again.'), 405
+@app.errorhandler(404)
+def not_found(error):
+    """ Handles Products that cannot be found """
+    return jsonify(status=404, error='Not Found', message=error.message), 404
+
+#@app.errorhandler(405)
+#def method_not_supported(error):
+#    """ Handles bad method calls """
+#    return jsonify(status=405, error='Method not Allowed', message='Your request method is not supported. Check your HTTP method and try again.'), 405
 
 @app.errorhandler(500)
 def internal_server_error(error):
     """ Handles catostrophic errors """
     return jsonify(status=500, error='Internal Server Error', message=error.message), 500
 
+######################################################################
+# GET HEALTH CHECK
+######################################################################
+@app.route('/healthcheck')
+def healthcheck():
+    """ Let them know our heart is still beating """
+    return make_response(jsonify(status=200, message='Healthy'), status.HTTP_200_OK)	
+	
 ######################################################################
 # GET INDEX
 ######################################################################
@@ -64,7 +70,7 @@ def index():
 ######################################################################
 # LIST ALL products
 ######################################################################
-@app.route('/Products', methods=['GET'])
+@app.route('/products', methods=['GET'])
 def list_product():
     """ Retrieves a list of products from the database """
     results = []
@@ -83,7 +89,7 @@ def list_product():
 ######################################################################
 # LIST AVAILABLE Products
 ######################################################################
-@app.route('/Products/available', methods=['GET'])
+@app.route('/products/available', methods=['GET'])
 def list_available_products():
     """ Retrieves a list of available products from the database """
     results = []
@@ -93,7 +99,7 @@ def list_available_products():
 ######################################################################
 # RETRIEVE A PRODUCT
 ######################################################################
-@app.route('/Products/<int:id>', methods=['GET'])
+@app.route('/products/<int:id>', methods=['GET'])
 def get_products(id):
     """ Retrieves a Product with a specific id """
     product = Product.find(id)
@@ -111,7 +117,7 @@ def get_products(id):
 ######################################################################
 # ADD A NEW PRODUCT
 ######################################################################
-@app.route('/Products', methods=['POST'])
+@app.route('/products', methods=['POST'])
 def create_product():
     """ Creates a Product in the datbase from the posted database """
     payload = request.get_json(force=True)
@@ -128,7 +134,7 @@ def create_product():
 ######################################################################
 # UPDATE AN EXISTING PRODUCT
 ######################################################################
-@app.route('/Products/<int:id>', methods=['PUT'])
+@app.route('/products/<int:id>', methods=['PUT'])
 def update_products(id):
     """ Updates a Products in the database fom the posted database """
     product = Product.find(id)
@@ -144,7 +150,7 @@ def update_products(id):
 
     return make_response(jsonify(message), return_code)
 
-@app.route('/Products/add_unit/<int:id>', methods=['PUT'])
+@app.route('/products/<int:id>/add_unit', methods=['PUT'])
 def add_product_unit(id):
     """ Updates a Product in the database fom the posted database """
     product = Product.find(id)
@@ -158,7 +164,7 @@ def add_product_unit(id):
 
     return make_response(jsonify(message), return_code)
 
-@app.route('/Products/sell_products/<int:id>', methods=['PUT'])
+@app.route('/products/<int:id>/sell_products', methods=['PUT'])
 def sell_products(id):
     """ Updates a Product in the database fom the posted database """
     product = Product.find(id)
@@ -179,7 +185,7 @@ def sell_products(id):
 ######################################################################
 # DELETE A Product
 ######################################################################
-@app.route('/Products/<int:id>', methods=['DELETE'])
+@app.route('/products/<int:id>', methods=['DELETE'])
 def delete_product(id):
     """ Removes a Product from the database that matches the id """
     product = Product.find(id)
@@ -187,6 +193,25 @@ def delete_product(id):
         product.delete()
     return make_response('', HTTP_204_NO_CONTENT)
 
+######################################################################
+#  U T I L I T Y   F U N C T I O N S
+######################################################################
+'''
+@app.before_first_request
+def init_db(redis=None):
+    """ Initlaize the model """
+    Product.init_db(redis)
+
+# load sample data
+def data_load(payload):
+    """ Loads a Pet into the database """
+    product = Product(0, payload['name'], payload['category'])
+    product.save()
+
+def data_reset():
+    """ Removes all Pets from the database """
+    Product.remove_all()
+'''	
 ######################################################################
 # GET PRODUCT DATA
 ######################################################################
@@ -202,8 +227,8 @@ def get_product_data():
 ######################################################################
 if __name__ == "__main__":
     # dummy data for testing
-    Product(0, 'Asus2500', 'Laptop', '234', 'qerwrw', 'erwwfwf').save()
-    Product(0, 'GE4509', 'Microwave','34324', 'wewef', 'fwfwsxdws' ).save()
+    Product(0, 'Asus2500', 'Laptop', '299', 'In Great Condition', 'Black',10).save()
+    Product(1, 'GE4509', 'Microwave','50', 'Working', 'Red',20 ).save()
     #get_product_data()
     app.run(host='0.0.0.0',port=int(PORT), debug=DEBUG)
     #port = int(os.environ.get('PORT', 5000))
