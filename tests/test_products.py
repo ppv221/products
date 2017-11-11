@@ -17,7 +17,7 @@ VCAP_SERVICES = {
             'password': '',
             'hostname': '127.0.0.1',
             'port': '6379'
-            }
+        }
         }
     ]
 }
@@ -25,6 +25,8 @@ VCAP_SERVICES = {
 ######################################################################
 #  T E S T   C A S E S
 ######################################################################
+
+
 class TestProduct(unittest.TestCase):
     """ Test Cases for Products """
 
@@ -35,7 +37,7 @@ class TestProduct(unittest.TestCase):
 
     def test_create_a_product(self):
         """ Create a product and assert that it exists """
-        p = Product(0, 'Asus2500', 'Laptop', '34', 'laptop', 'blue',4)
+        p = Product(0, 'Asus2500', 'Laptop', '34', 'laptop', 'blue', 4)
         self.assertTrue(p != None)
         self.assertEqual(p.id, 0)
         self.assertEqual(p.name, "Asus2500")
@@ -45,7 +47,7 @@ class TestProduct(unittest.TestCase):
         """ Create a product and add it to the database """
         p = Product.all()
         self.assertEqual(p, [])
-        p = Product(0, 'Asus2500', 'Laptop', '234', 'laptop', 'blue',4)
+        p = Product(0, 'Asus2500', 'Laptop', '234', 'laptop', 'blue', 4)
         self.assertTrue(p != None)
         self.assertEqual(p.id, 0)
         p.save()
@@ -56,7 +58,7 @@ class TestProduct(unittest.TestCase):
 
     def test_update_a_product(self):
         """ Update a Product """
-        p = Product(0, 'Asus2500', 'Laptop', '234', 'laptop', 'blue',4)
+        p = Product(0, 'Asus2500', 'Laptop', '234', 'laptop', 'blue', 4)
         p.save()
         self.assertEqual(p.id, 1)
         # Change it an save it
@@ -71,7 +73,7 @@ class TestProduct(unittest.TestCase):
 
     def test_delete_a_product(self):
         """ Delete a Product """
-        p = Product(0, 'Asus2500', 'Laptop', '234', 'laptop', 'blue',4)
+        p = Product(0, 'Asus2500', 'Laptop', '234', 'laptop', 'blue', 4)
         p.save()
         self.assertEqual(len(Product.all()), 1)
         # delete the product and make sure it isn't in the database
@@ -80,7 +82,7 @@ class TestProduct(unittest.TestCase):
 
     def test_serialize_a_product(self):
         """ Test serialization of a Product """
-        p = Product(0, 'Asus2500', 'Laptop', '234', 'laptop', 'blue',4)
+        p = Product(0, 'Asus2500', 'Laptop', '234', 'laptop', 'blue', 4)
         data = p.serialize()
         self.assertNotEqual(data, None)
         self.assertIn('id', data)
@@ -100,9 +102,12 @@ class TestProduct(unittest.TestCase):
 
     def test_deserialize_a_product(self):
         """ Test deserialization of a Product """
-        data = {"id": 1, "name": "Asus2500", "category": "Laptop","price": "234", "description": "laptop", "color": "blue",'count':4}
-        products = Product()
+        data = {"id": 1, "name": "Asus2500", "category": "Laptop",
+                "price": "234", "description": "laptop",
+                "color": "blue", 'count': 4}
+        products = Product(data['id'])
         products.deserialize(data)
+
         self.assertNotEqual(products, None)
         self.assertEqual(products.id, 1)
         self.assertEqual(products.name, "Asus2500")
@@ -115,7 +120,7 @@ class TestProduct(unittest.TestCase):
     def test_deserialize_with_no_name(self):
         """ Deserialize a Product without a name """
         products = Product()
-        data = {"id":0, "category": "Laptop"}
+        data = {"id": 0, "category": "Laptop"}
         self.assertRaises(DataValidationError, products.deserialize, data)
 
     def test_deserialize_with_no_data(self):
@@ -129,8 +134,9 @@ class TestProduct(unittest.TestCase):
         self.assertRaises(DataValidationError, products.deserialize, "data")
 
     def test_available(self):
-        Product(0, 'Asus2500', 'Laptop', '234', 'laptop', 'blue',4).save()
-        Product(0, 'GE4509', 'Microwave','34324', 'microwave', 'black',0).save()
+        Product(0, 'Asus2500', 'Laptop', '234', 'laptop', 'blue', 4).save()
+        Product(0, 'GE4509', 'Microwave', '34324',
+                'microwave', 'black', 0).save()
 
         products = Product.available()
 
@@ -141,8 +147,9 @@ class TestProduct(unittest.TestCase):
 
     def test_find_product(self):
         """ Find a Product by ID """
-        Product(0, 'Asus2500', 'Laptop', '234', 'laptop', 'blue',4).save()
-        Product(0, 'GE4509', 'Microwave','34324', 'microwave', 'black',4 ).save()
+        Product(0, 'Asus2500', 'Laptop', '234', 'laptop', 'blue', 4).save()
+        Product(0, 'GE4509', 'Microwave', '34324',
+                'microwave', 'black', 4).save()
         products = Product.find(2)
 
         self.assertIsNot(products, None)
@@ -156,15 +163,16 @@ class TestProduct(unittest.TestCase):
 
     def test_product_not_found(self):
         """ Test for a Product that doesn't exist """
-        Product(0, 'Asus2500', 'Laptop', '234', 'laptop', 'blue',4).save()
+        Product(0, 'Asus2500', 'Laptop', '234', 'laptop', 'blue', 4).save()
         #Product(0, 'GE4509', 'Microwave','34324', 'wewef', 'fwfwsxdws' ).save()
         products = Product.find(2)
         self.assertIs(products, None)
 
     def test_find_by_category(self):
         """ Find Products by Category """
-        Product(0, 'Asus2500', 'Laptop', '234', 'laptop', 'blue',4).save()
-        Product(0, 'GE4509', 'Microwave','34324', 'microwave', 'black',4 ).save()
+        Product(0, 'Asus2500', 'Laptop', '234', 'laptop', 'blue', 4).save()
+        Product(0, 'GE4509', 'Microwave', '34324',
+                'microwave', 'black', 4).save()
         products = Product.find_by_category("Laptop")
         self.assertNotEqual(len(products), 0)
         self.assertEqual(products[0].category, "Laptop")
@@ -172,13 +180,13 @@ class TestProduct(unittest.TestCase):
 
     def test_find_by_name(self):
         """ Find a Product by Name """
-        Product(0, 'Asus2500', 'Laptop', '234', 'laptop', 'blue',4).save()
-        Product(0, 'GE4509', 'Microwave','34324', 'microwave', 'black',4 ).save()
+        Product(0, 'Asus2500', 'Laptop', '234', 'laptop', 'blue', 4).save()
+        Product(0, 'GE4509', 'Microwave', '34324',
+                'microwave', 'black', 4).save()
         products = Product.find_by_name("Asus2500")
         self.assertEqual(len(products), 1)
         self.assertEqual(products[0].category, "Laptop")
         self.assertEqual(products[0].name, "Asus2500")
-
 
     def test_passing_connection(self):
         """ Pass in the Redis connection """
@@ -187,7 +195,8 @@ class TestProduct(unittest.TestCase):
 
     def test_passing_bad_connection(self):
         """ Pass in a bad Redis connection """
-        self.assertRaises(ConnectionError, Product.init_db, Redis(host='127.0.0.1', port=6300))
+        self.assertRaises(ConnectionError, Product.init_db,
+                          Redis(host='127.0.0.1', port=6300))
         self.assertIsNone(Product.redis)
 
     @patch.dict(os.environ, {'VCAP_SERVICES': json.dumps(VCAP_SERVICES)})
