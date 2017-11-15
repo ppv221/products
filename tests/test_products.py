@@ -12,7 +12,7 @@ from models import Product, DataValidationError
 
 
 VCAP_SERVICES = {
-    'Redis Cloud-rn': [
+    'rediscloud': [
         {'credentials': {
             'password': '',
             'hostname': '127.0.0.1',

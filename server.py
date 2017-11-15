@@ -266,10 +266,10 @@ def get_product_data():
     data_reset()
 
     Product(0, 'Asus2500', 'Laptop', '234',
-            'qerwrw', 'erwwfwf', 23).save()
-    Product(0, 'GE4509', 'Microwave', '34324',
-            'wewef', 'fwfwsxdws', 12).save()
-    Product(0, 'Hp', 'Microwave', '960', 'Micro', 'blue', 0).save()
+            'Working Condition', 'Black', 23).save()
+    Product(0, 'GE4509', 'Microwave', '45',
+            'Open Box', 'Black', 12).save()
+    Product(0, 'Hp', 'Microwave', '960', 'Brand New', 'Blue', 0).save()
 
 ######################################################################
 #   M A I N
