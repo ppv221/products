@@ -1,14 +1,10 @@
-# Test cases can be run with:
-# nosetests
-# coverage report -m
-
 """ Test cases for Product Model """
 import os
 import json
 import unittest
 from mock import patch
 from redis import Redis, ConnectionError
-from models import Product, DataValidationError
+from app.models import Product, DataValidationError
 
 
 VCAP_SERVICES = {
@@ -25,8 +21,6 @@ VCAP_SERVICES = {
 ######################################################################
 #  T E S T   C A S E S
 ######################################################################
-
-
 class TestProduct(unittest.TestCase):
     """ Test Cases for Products """
 

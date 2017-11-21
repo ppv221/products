@@ -4,6 +4,7 @@ import logging
 from flask import Flask, Response, jsonify
 from flask import request, json, url_for, make_response
 from models import Product, DataValidationError
+from flask_api import status
 import sys
 
 # Pull options from environment
@@ -91,12 +92,13 @@ def list_product():
     """ Retrieves a list of products from the database """
     results = []
     category = request.args.get('category')
+    #print (category)
     name = request.args.get('name')
     if category:
         # print("Category is " + category)
-        results = Product.find_by_category(str(category))
+        results = Product.find_by_category(str(category).lower())
     elif name:
-        results = Product.find_by_name(str(name))
+        results = Product.find_by_name(str(name).lower())
     else:
         results = Product.all()
 
@@ -143,17 +145,29 @@ def get_products(id):
 
 @app.route('/products', methods=['POST'])
 def create_product():
-    """ Creates a Product in the datbase from the posted database """
-    payload = request.get_json(force=True)
-    product = Product()
-    # print payload
-    product.deserialize(payload)
-    #print (product.id,product.name)
-    product.save()
-    message = product.serialize()
-    response = make_response(jsonify(message), HTTP_201_CREATED)
-    response.headers['Location'] = url_for(
-        'get_products', id=product.id, _external=True)
+    data = {}
+    # Check for form submission data
+    if request.headers.get('Content-Type') == 'application/x-www-form-urlencoded':
+        app.logger.info('Getting data from form submit')
+        data = {
+            'name': request.form['name'],
+            'category': request.form['category'],
+            "color": request.form['color'],"count": request.form['count'],
+		"price": request.form['price'],"description": request.form['description']
+        }
+    else:
+        app.logger.info('Getting data from API call')
+        """ Creates a Product in the datbase from the posted database """
+        payload = request.get_json(force=True)
+        product = Product()
+        # print payload
+        product.deserialize(payload)
+        #print (product.id,product.name)
+        product.save()
+        message = product.serialize()
+        response = make_response(jsonify(message), HTTP_201_CREATED)
+        response.headers['Location'] = url_for(
+            'get_products', id=product.id, _external=True)
     return response
 
 ######################################################################
@@ -228,17 +242,30 @@ def delete_product(id):
     return make_response('', HTTP_204_NO_CONTENT)
 
 ######################################################################
+# DELETE ALL PET DATA (for testing only)
+######################################################################
+@app.route('/products/reset', methods=['DELETE'])
+def products_reset():
+    print ("REACHED HERE")
+    """ Removes all pets from the database """
+    Product.remove_all()
+    print ("LEAVING HERE")
+    return make_response('', status.HTTP_204_NO_CONTENT)
+
+######################################################################
 #  U T I L I T Y   F U N C T I O N S
 ######################################################################
-'''
+
 
 # load sample data
 def data_load(payload):
     """ Loads a Pet into the database """
-    product = Product(0, payload['name'], payload['category'])
-    product.save()
+    Product(0, 'Asus2500', 'Laptop', '234',
+            'Working Condition', 'Black', 23).save()
+    Product(0, 'GE4509', 'Microwave', '45',
+            'Open Box', 'Black', 12).save()
+    Product(0, 'Hp', 'Microwave', '960', 'Brand New', 'Blue', 0).save()
 
-'''
 ######################################################################
 # GET PRODUCT DATA
 ######################################################################
@@ -284,6 +311,6 @@ if __name__ == "__main__":
     get_product_data()
 
     app.run(host='0.0.0.0', port=int(PORT), debug=DEBUG)
-    # get_product_data()
+    #get_product_data()
     #port = int(os.environ.get('PORT', 5000))
     #socketio.run(app, host='0.0.0.0', port=port)

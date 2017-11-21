@@ -1,15 +1,11 @@
-# Test cases can be run with:
-# nosetests
-# coverage report -m
-
 """ Test cases for the Product E-Commerce Site """
 
 import logging
 import unittest
 import json
-#from mock import MagicMock, patch
+from mock import MagicMock, patch
 from flask_api import status    # HTTP Status Codes
-import server
+from app import server
 
 HTTP_200_OK = 200
 HTTP_201_CREATED = 201
@@ -50,7 +46,7 @@ class TestProductServer(unittest.TestCase):
         resp = self.app.get('/')
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         # data = json.loads(resp.data)
-        self.assertIn('Products', resp.data)
+        self.assertIn('Product', resp.data)
 
     def test_get_product_list(self):
         """ Get a list of Product """
