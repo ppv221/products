@@ -10,21 +10,29 @@ $(function () {
         $("#product_id").val(res.id);
         $("#product_name").val(res.name);
         $("#product_category").val(res.category);
-        if (res.available == true) 
+		$("#product_price").val(res.price);
+		$("#product_color").val(res.color);
+		$("#product_count").val(res.count);
+		$("#product_description").val(res.description);
+       /*  if (res.id) 
         {
-            $("#product_available").val("true");
+            $("#product_id").val("res.id");
         } 
         else 
         {
             $("#product_available").val("false");
-        }
+        } */
     }
 
     /// Clears all form fields
     function clear_form_data() {
-        $("#product_name").val("");
+		$("#product_name").val("");
         $("#product_category").val("");
-        $("#product_available").val("");
+		$("#product_price").val("");
+		$("#product_color").val("");
+		$("#product_count").val("");
+		$("#product_description").val("");
+        
     }
 
     // Updates the flash message area
@@ -34,19 +42,27 @@ $(function () {
     }
 
     // ****************************************
-    // Create a Pet
+    // Create a Product
     // ****************************************
 
     $("#create-btn").click(function () {
 
         var name = $("#product_name").val();
         var category = $("#product_category").val();
-        var available = $("#product_available").val() == "true";
+		var price = $("#product_price").val();
+		var color = $("#product_color").val();
+		var count = $("#product_count").val();
+		var description =$("#product_description").val();
+       // var available = $("#product_available").val() == "true";
 
         var data = {
             "name": name,
             "category": category,
-            "available": available
+            "color": color,
+			"price": price,
+			"count": count,
+			"description": description
+			
         };
 
         var ajax = $.ajax({
@@ -68,7 +84,7 @@ $(function () {
 
 
     // ****************************************
-    // Update a Pet
+    // Update a Product
     // ****************************************
 
     $("#update-btn").click(function () {
@@ -76,12 +92,18 @@ $(function () {
         var product_id = $("#product_id").val();
         var name = $("#product_name").val();
         var category = $("#product_category").val();
-        var available = $("#product_available").val() == "true";
+        var price = $("#product_price").val();
+		var color = $("#product_color").val();
+		var count = $("#product_count").val();
+		var description =$("#product_description").val();
 
         var data = {
             "name": name,
             "category": category,
-            "available": available
+            "color": color,
+			"price": price,
+			"count": count,
+			"description": description
         };
 
         var ajax = $.ajax({
@@ -103,7 +125,7 @@ $(function () {
     });
 
     // ****************************************
-    // Retrieve a Pet
+    // Retrieve a Product
     // ****************************************
 
     $("#retrieve-btn").click(function () {
@@ -131,7 +153,7 @@ $(function () {
     });
 
     // ****************************************
-    // Delete a Pet
+    // Delete a Product
     // ****************************************
 
     $("#delete-btn").click(function () {
@@ -147,7 +169,7 @@ $(function () {
 
         ajax.done(function(res){
             clear_form_data()
-            flash_message("Pet with ID [" + res.id + "] has been Deleted!")
+            flash_message("Product with ID [" + res.id + "] has been Deleted!")
         });
 
         ajax.fail(function(res){
@@ -165,14 +187,17 @@ $(function () {
     });
 
     // ****************************************
-    // Search for a Pet
+    // Search for a Product
     // ****************************************
 
     $("#search-btn").click(function () {
 
         var name = $("#product_name").val();
         var category = $("#product_category").val();
-        var available = $("#product_available").val() == "true";
+        var price = $("#product_price").val();
+		var color = $("#product_color").val();
+		var count = $("#product_count").val();
+		var description =$("#product_description").val();
 
         var queryString = ""
 
@@ -186,13 +211,30 @@ $(function () {
                 queryString += 'category=' + category
             }
         }
-        if (available) {
-            if (queryString.length > 0) {
-                queryString += '&available=' + available
-            } else {
-                queryString += 'available=' + available
-            }
+		
+		/* if (price) {
+            queryString += 'price=' + price
         }
+		
+		if (color) {
+            queryString += 'color=' + color
+        }
+		
+		if (count) {
+            queryString += 'count=' + count
+        }
+		if (description) {
+            queryString += 'description=' + description
+        } */
+		
+		
+       // if (available) {
+       //     if (queryString.length > 0) {
+       //         queryString += '&available=' + available
+       //     } else {
+       //         queryString += 'available=' + available
+       //     }
+       // }
 
         var ajax = $.ajax({
             type: "GET",
@@ -209,11 +251,14 @@ $(function () {
             header += '<th style="width:10%">ID</th>'
             header += '<th style="width:40%">Name</th>'
             header += '<th style="width:40%">Category</th>'
-            header += '<th style="width:10%">Available</th></tr>'
+			header += '<th style="width:40%">Color</th>'
+			header += '<th style="width:40%">Price</th>'
+			header += '<th style="width:40%">Count</th>'
+            header += '<th style="width:10%">Description</th></tr>'
             $("#search_results").append(header);
             for(var i = 0; i < res.length; i++) {
                 product = res[i];
-                var row = "<tr><td>"+product.id+"</td><td>"+product.name+"</td><td>"+product.category+"</td><td>"+product.available+"</td></tr>";
+                var row = "<tr><td>"+product.id+"</td><td>"+product.name+"</td><td>"+product.category+"</td><td>"+product.color+"</td><td>"+product.price+"</td><td>"+product.count+"</td><td>"+product.description+"</td></tr>";
                 $("#search_results").append(row);
             }
 
