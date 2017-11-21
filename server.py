@@ -147,13 +147,16 @@ def get_products(id):
 def create_product():
     data = {}
     # Check for form submission data
-    if request.headers.get('Content-Type') == 'application/x-www-form-urlencoded':
+    if request.headers.get('Content-Type') ==
+    'application/x-www-form-urlencoded':
         app.logger.info('Getting data from form submit')
         data = {
             'name': request.form['name'],
             'category': request.form['category'],
-            "color": request.form['color'],"count": request.form['count'],
-		"price": request.form['price'],"description": request.form['description']
+            "color": request.form['color'],
+            "count": request.form['count'],
+            "price": request.form['price'],
+            "description": request.form['description']
         }
     else:
         app.logger.info('Getting data from API call')
@@ -244,12 +247,14 @@ def delete_product(id):
 ######################################################################
 # DELETE ALL PET DATA (for testing only)
 ######################################################################
+
+
 @app.route('/products/reset', methods=['DELETE'])
 def products_reset():
-    print ("REACHED HERE")
+    print("REACHED HERE")
     """ Removes all pets from the database """
     Product.remove_all()
-    print ("LEAVING HERE")
+    print("LEAVING HERE")
     return make_response('', status.HTTP_204_NO_CONTENT)
 
 ######################################################################
@@ -290,7 +295,7 @@ def get_product_data():
     #         Product(0, row['Name'], row['Category'], row['Price'], row[
     #                 'Description'], row['Color'], int(row['Count'])).save()
     init_db()
-    data_reset()
+    # data_reset()
 
     Product(0, 'Asus2500', 'Laptop', '234',
             'Working Condition', 'Black', 23).save()
@@ -311,6 +316,6 @@ if __name__ == "__main__":
     get_product_data()
 
     app.run(host='0.0.0.0', port=int(PORT), debug=DEBUG)
-    #get_product_data()
+    # get_product_data()
     #port = int(os.environ.get('PORT', 5000))
     #socketio.run(app, host='0.0.0.0', port=port)

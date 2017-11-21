@@ -34,7 +34,7 @@ Scenario: List all products
     And I should see "GE4509" in the results
     And I should see "Moto X4" in the results
 
-Scenario: List all categories
+Scenario: Search by categories
     When I visit the "Home Page"
     And I set the "Category" to "Phone"
     And I press the "Search" button
