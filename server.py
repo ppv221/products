@@ -147,7 +147,11 @@ def get_products(id):
 def create_product():
     data = {}
     # Check for form submission data
+<<<<<<< HEAD
     if request.headers.get('Content-Type') == 'application/x-www-form-urlencoded':
+=======
+    if request.headers.get('Content-Type') =='application/x-www-form-urlencoded':
+>>>>>>> server file edits
         app.logger.info('Getting data from form submit')
         data = {
             'name': request.form['name'],
