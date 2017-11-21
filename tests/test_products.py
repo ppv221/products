@@ -4,7 +4,7 @@ import json
 import unittest
 from mock import patch
 from redis import Redis, ConnectionError
-from app.models import Product, DataValidationError
+from models import Product, DataValidationError
 
 
 VCAP_SERVICES = {

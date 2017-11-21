@@ -118,7 +118,7 @@ class Product(object):
 
     @staticmethod
     def available():
-        """ Returns all of the Products in the database 
+        """ Returns all of the Products in the database
         with count greater than 0"""
         results = []
 
@@ -163,7 +163,7 @@ class Product(object):
         #else:
         #print ("INFB")
         #print (value)
-        search_criteria = value
+        #search_criteria = value
         results = []
         for key in Product.redis.keys():
             if key != 'index':  # filer out our id index

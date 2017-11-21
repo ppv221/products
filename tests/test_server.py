@@ -5,7 +5,7 @@ import unittest
 import json
 from mock import MagicMock, patch
 from flask_api import status    # HTTP Status Codes
-from app import server
+import server
 
 HTTP_200_OK = 200
 HTTP_201_CREATED = 201
