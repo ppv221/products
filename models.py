@@ -3,6 +3,7 @@ import json
 import logging
 import pickle
 from redis import Redis
+from cerberus import Validator
 from redis.exceptions import ConnectionError
 
 
@@ -21,6 +22,16 @@ class Product(object):
     #index = 0
     logger = logging.getLogger(__name__)
     redis = None
+    schema = {
+        'id': {'type': 'integer'},
+        'name': {'type': 'string', 'required': True},
+        'category': {'type': 'string', 'required': True},
+        'price': {'type': 'integer', 'required': True},
+        'description': {'type': 'string', 'required': True},
+        'color': {'type': 'string', 'required': True},
+        'count': {'type': 'integer', 'required': True}
+        }
+    __validator = Validator(schema)
 
     def __init__(self, id=0, name='', category='',
                  price='', description='', color='', count=''):
@@ -147,21 +158,23 @@ class Product(object):
     def __find_by(attribute, value):
         """ Generic Query that finds a key with a specific value """
         Product.logger.info('Processing %s query for %s', attribute, value)
-        if isinstance(value, str):
-            search_criteria = value.lower()  # make case insensitive
-        else:
-            search_criteria = value
+        #if isinstance(value, str):
+        search_criteria = value.lower()  # make case insensitive
+        #else:
+        #print ("INFB")
+        #print (value)
+        search_criteria = value
         results = []
         for key in Product.redis.keys():
             if key != 'index':  # filer out our id index
                 # print("Key:" + key)
                 data = pickle.loads(Product.redis.get(key))
-                # print(data[attribute])
+                #print(data[attribute])
                 # perform case insensitive search on strings
-                if isinstance(data[attribute], str):
-                    test_value = data[attribute].lower()
-                else:
-                    test_value = data[attribute]
+                #if isinstance(data[attribute], str):
+                test_value = data[attribute].lower()
+                #else:
+                #test_value = data[attribute]
                 # print(search_criteria, test_value)
                 if test_value == search_criteria:
                     results.append(Product(data['id']).deserialize(data))
@@ -173,6 +186,7 @@ class Product(object):
         Args:
             category (string): the category of the Products you want to match
         """
+        #print ("IN FBC")
         return Product.__find_by('category', category)
         # return [p for p in Product.data if p.category == category]
 
