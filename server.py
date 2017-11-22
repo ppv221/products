@@ -147,8 +147,7 @@ def get_products(id):
 def create_product():
     data = {}
     # Check for form submission data
-    if request.headers.get('Content-Type') ==
-    'application/x-www-form-urlencoded':
+    if request.headers.get('Content-Type') == 'application/x-www-form-urlencoded':
         app.logger.info('Getting data from form submit')
         data = {
             'name': request.form['name'],
@@ -295,7 +294,7 @@ def get_product_data():
     #         Product(0, row['Name'], row['Category'], row['Price'], row[
     #                 'Description'], row['Color'], int(row['Count'])).save()
     init_db()
-    # data_reset()
+    data_reset()
 
     Product(0, 'Asus2500', 'Laptop', '234',
             'Working Condition', 'Black', 23).save()

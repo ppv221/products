@@ -34,6 +34,12 @@ Scenario: List all products
     And I should see "GE4509" in the results
     And I should see "Moto X4" in the results
 
+Scenario: Retrieve a Product
+    When I visit the "Home Page"
+    And I set the "Id" to "2"
+    And I press the "Retrieve" button
+    Then I should see "GE4509" in the "Name" field
+
 Scenario: Search by categories
     When I visit the "Home Page"
     And I set the "Category" to "Phone"
@@ -56,3 +62,32 @@ Scenario: Update a Product
     And I press the "Search" button
     Then I should see "samsung8" in the results
     Then I should not see "Flip Phone" in the results
+
+Scenario: Add a Product Unit
+    When I visit the "Home Page"
+    And I set the "Id" to "1"
+    And I press the "Retrieve" button
+    Then I should see "Flip Phone" in the "Name" field
+    When I press the "Add Unit" button
+    Then I should see the message "Success"
+    And I should see "6" in the "Count" field
+
+Scenario: Sell a Product Unit
+    When I visit the "Home Page"
+    And I set the "Id" to "2"
+    And I press the "Retrieve" button
+    Then I should see "GE4509" in the "Name" field
+    When I press the "Sell Unit" button
+    Then I should see the message "Success"
+    When I set the "Id" to "2"
+    And I press the "Retrieve" button
+    Then I should see "11" in the "Count" field
+
+Scenario: Delete a Product
+    When I visit the "Home Page"
+    And I set the "Id" to "3"
+    And I press the "Delete" button
+    Then I should see the message "Product has been deleted"
+    When I set the "Id" to "3"
+    And I press the "Retrieve" button
+    Then I should not see "Moto X4" in the results

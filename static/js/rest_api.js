@@ -74,7 +74,7 @@ $(function () {
 
         ajax.done(function(res){
             update_form_data(res)
-            flash_message("Success")
+            flash_message("Great Success")
         });
 
         ajax.fail(function(res){
@@ -115,7 +115,7 @@ $(function () {
 
         ajax.done(function(res){
             update_form_data(res)
-            flash_message("Success")
+            flash_message("Great Success")
         });
 
         ajax.fail(function(res){
@@ -131,6 +131,7 @@ $(function () {
     $("#retrieve-btn").click(function () {
 
         var product_id = $("#product_id").val();
+        var count = $("#product_count").val();
 
         var ajax = $.ajax({
             type: "GET",
@@ -142,7 +143,57 @@ $(function () {
         ajax.done(function(res){
             //alert(res.toSource())
             update_form_data(res)
-            flash_message("Success")
+            flash_message("Great Success,let's have fun")
+        });
+
+        ajax.fail(function(res){
+            clear_form_data()
+            flash_message(res.responseJSON.message)
+        });
+
+    });
+
+    $("#add-unit-btn").click(function () 
+    {
+
+        var product_id = $("#product_id").val();
+
+        var ajax = $.ajax({
+            type: "PUT",
+            url: "/products/" + product_id + "/add_unit",
+            contentType:"application/json",
+            data: ''
+        })
+
+        ajax.done(function(res){
+            //alert(res.toSource())
+            update_form_data(res)
+            flash_message("Great Success")
+        });
+
+        ajax.fail(function(res){
+            clear_form_data()
+            flash_message(res.responseJSON.message)
+        });
+
+    });
+
+    $("#sell-unit-btn").click(function () 
+    {
+
+        var product_id = $("#product_id").val();
+
+        var ajax = $.ajax({
+            type: "PUT",
+            url: "/products/" + product_id + "/sell_products",
+            contentType:"application/json",
+            data: ''
+        })
+
+        ajax.done(function(res){
+            //alert(res.toSource())
+            update_form_data(res)
+            flash_message("Great Success")
         });
 
         ajax.fail(function(res){
@@ -167,9 +218,13 @@ $(function () {
             data: '',
         })
 
+        // flash_message("Product with ID [" + res.id + "] has been Deleted!")
+        
         ajax.done(function(res){
             clear_form_data()
-            flash_message("Product with ID [" + res.id + "] has been Deleted!")
+            // flash_message("Product with ID [" + res.id + "] has been Deleted!")
+            // flash_message("Product with ID 5 has been Deleted!")
+            flash_message("Product has been deleted!")
         });
 
         ajax.fail(function(res){
@@ -190,7 +245,8 @@ $(function () {
     // Search for a Product
     // ****************************************
 
-    $("#search-btn").click(function () {
+    $("#search-btn").click(function () 
+    {
 
         var name = $("#product_name").val();
         var category = $("#product_category").val();
@@ -243,7 +299,8 @@ $(function () {
             data: ''
         })
 
-        ajax.done(function(res){
+        ajax.done(function(res)
+        {
             //alert(res.toSource())
             $("#search_results").empty();
             $("#search_results").append('<table class="table-striped">');
@@ -264,10 +321,11 @@ $(function () {
 
             $("#search_results").append('</table>');
 
-            flash_message("Success")
+            flash_message("Great Success")
         });
 
-        ajax.fail(function(res){
+        ajax.fail(function(res)
+        {
             flash_message(res.responseJSON.message)
         });
 

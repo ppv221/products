@@ -3,7 +3,7 @@ applications:
   memory: 128M
   instances: 2
   domain: mybluemix.net
-  name: nyu-product-service-f17
-  host: nyu-product-service-f17
+  name: nyu-devops-sample
+  host: nyu-devops-sample
   disk_quota: 1024M
   buildpack: python_buildpack
