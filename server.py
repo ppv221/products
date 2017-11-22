@@ -148,10 +148,17 @@ def create_product():
     data = {}
     # Check for form submission data
 <<<<<<< HEAD
+<<<<<<< HEAD
     if request.headers.get('Content-Type') == 'application/x-www-form-urlencoded':
 =======
     if request.headers.get('Content-Type') =='application/x-www-form-urlencoded':
 >>>>>>> server file edits
+=======
+    if request.headers.get('Content-Type') =='application/x-www-form-urlencoded':
+=======
+    if request.headers.get('Content-Type') == 'application/x-www-form-urlencoded':
+>>>>>>> Deployment Ready and all features added
+>>>>>>> Deployment Ready and all features added
         app.logger.info('Getting data from form submit')
         data = {
             'name': request.form['name'],
