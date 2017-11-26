@@ -6,36 +6,42 @@ import server
 
 BASE_URL = getenv('BASE_URL', 'http://localhost:5000/')
 
+
 @given(u'the following products')
 def step_impl(context):
     """ Delete all Pets and load new ones """
     headers = {'Content-Type': 'application/json'}
-    context.resp = requests.delete(context.base_url + '/products/reset', headers=headers)
+    context.resp = requests.delete(
+        context.base_url + '/products/reset', headers=headers)
     #print ("HHHHHHHHHHETTTTTTTTTTTTT")
     #print (context.resp.status_code)
     assert context.resp.status_code == 204
     create_url = context.base_url + '/products'
     for row in context.table:
-	data = {"name": row['name'],"category": row['category'],
-                "color": row['color'],"count": row['count'],
-		"price": row['price'],"description": row['description']}
+        data = {"name": row['name'], "category": row['category'],
+                "color": row['color'], "count": row['count'],
+                "price": row['price'], "description": row['description']}
         payload = json.dumps(data)
         context.resp = requests.post(create_url, data=payload, headers=headers)
         assert context.resp.status_code == 201
+
 
 @when(u'I visit the "home page"')
 def step_impl(context):
     """ Make a call to the base URL """
     context.driver.get(context.base_url)
 
+
 @then(u'I should see "{message}" in the title')
 def step_impl(context, message):
     """ Check the document title for a message """
     assert message in context.driver.title
 
+
 @then(u'I should not see "{message}"')
 def step_impl(context, message):
     assert message not in context.resp.text
+
 
 @when(u'I set the "{element_name}" to "{text_string}"')
 def step_impl(context, element_name, text_string):
@@ -52,20 +58,25 @@ def step_impl(context, element_name, text_string):
 # to get the element id of any button
 ##################################################################
 
+
 @when(u'I press the "{button}" button')
 def step_impl(context, button):
+    button = button.replace(' ', '-').lower()
     button_id = button.lower() + '-btn'
     context.driver.find_element_by_id(button_id).click()
+
 
 @then(u'I should see "{name}" in the results')
 def step_impl(context, name):
     element = context.driver.find_element_by_id('search_results')
     assert name in element.text
 
+
 @then(u'I should not see "{name}" in the results')
 def step_impl(context, name):
     element = context.driver.find_element_by_id('search_results')
     assert name not in element.text
+
 
 @then(u'I should see the message "{message}"')
 def step_impl(context, message):
@@ -79,11 +90,13 @@ def step_impl(context, message):
 # We can then lowercase the name and prefix with pet_ to get the id
 ##################################################################
 
+
 @then(u'I should see "{text_string}" in the "{element_name}" field')
 def step_impl(context, text_string, element_name):
     element_id = 'product_' + element_name.lower()
     element = context.driver.find_element_by_id(element_id)
     assert text_string in element.get_attribute('value')
+
 
 @when(u'I change "{element_name}" to "{text_string}"')
 def step_impl(context, element_name, text_string):
