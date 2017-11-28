@@ -6,4 +6,7 @@ This is the repository for DevOps project at NYU Fall 2017. We will develop a RE
 * vagrant up
 * vagrant ssh
 * cd /vagrant
-* nosetests tests/*
+* nosetests
+
+**For BDD testing, **
+* python server.py & behave
