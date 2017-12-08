@@ -3,7 +3,7 @@ applications:
   memory: 128M
   instances: 2
   domain: mybluemix.net
-  name: nyu-sprint4
-  host: nyu-sprint4
+  name: nyu-product-service-f17
+  host: nyu-product-service-f17
   disk_quota: 1024M
   buildpack: python_buildpack
