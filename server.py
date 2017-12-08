@@ -304,7 +304,7 @@ def get_product_data():
     Product(0, 'Hp', 'Microwave', '960', 'Brand New', 'Blue', 0).save()
 
 ######################################################################
-#   M A I N
+#   M A I N  F U N C T I O N
 ######################################################################
 if __name__ == "__main__":
     # dummy data for testing
