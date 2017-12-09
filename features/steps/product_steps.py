@@ -4,7 +4,9 @@ import requests
 from behave import *
 import server
 
-BASE_URL = getenv('BASE_URL', 'http://localhost:5000/')
+BASE_URL = os.getenv('BASE_URL', None)
+if not BASE_URL:
+    BASE_URL = getenv('BASE_URL', 'http://localhost:5000/')
 
 
 @given(u'the following products')
