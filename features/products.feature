@@ -20,10 +20,10 @@ Scenario: Create a Product
     When I visit the "Home Page"
     And I set the "Name" to "Flip Phone"
     And I set the "Category" to "Phone"
-	And I set the "Price" to "300"
-	And I set the "Count" to "5"
-	And I set the "Color" to "Blue"
-	And I set the "Description" to "flip"
+    And I set the "Price" to "300"
+    And I set the "Count" to "5"
+    And I set the "Color" to "Blue"
+    And I set the "Description" to "flip"
     And I press the "Create" button
     Then I should see the message "Success"
 
