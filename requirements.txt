@@ -17,3 +17,5 @@ requests==2.13.0
 # Runtime
 honcho
 httpie
+#Requests
+requests[security]
