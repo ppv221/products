@@ -4,7 +4,7 @@ import requests
 from behave import *
 import server
 
-BASE_URL = os.getenv('BASE_URL', None)
+BASE_URL = getenv('BASE_URL', None)
 if not BASE_URL:
     BASE_URL = getenv('BASE_URL', 'http://localhost:5000/')
 
