@@ -6,17 +6,19 @@ from mock import patch
 from redis import Redis, ConnectionError
 from models import Product, DataValidationError
 
+VCAP_SERVICES = os.getenv('VCAP_SERVICES', None)
 
-VCAP_SERVICES = {
-    'rediscloud': [
-        {'credentials': {
-            'password': '',
-            'hostname': '127.0.0.1',
-            'port': '6379'
-        }
-        }
-    ]
-}
+if not VCAP_SERVICES:
+    VCAP_SERVICES = {
+        'rediscloud': [
+            {'credentials': {
+                'password': '',
+                'hostname': '127.0.0.1',
+                'port': '6379'
+            }
+            }
+        ]
+    }
 
 ######################################################################
 #  T E S T   C A S E S
@@ -184,10 +186,10 @@ class TestProduct(unittest.TestCase):
         self.assertEqual(products[0].category, "Laptop")
         self.assertEqual(products[0].name, "Asus2500")
 
-    #def test_passing_connection(self):
-    #    """ Pass in the Redis connection """
-    #    Product.init_db(Redis(host='127.0.0.1', port=6379))
-    #    self.assertIsNotNone(Product.redis)
+    def test_passing_connection(self):
+        """ Pass in the Redis connection """
+        Product.init_db()
+        self.assertIsNotNone(Product.redis)
 
     def test_passing_bad_connection(self):
         """ Pass in a bad Redis connection """
