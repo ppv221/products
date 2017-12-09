@@ -5,7 +5,11 @@ import os
 from behave import *
 from selenium import webdriver
 
-BASE_URL = os.getenv('BASE_URL', 'http://localhost:5000')
+BASE_URL = os.getenv('BASE_URL', None)
+if not BASE_URL:
+    BASE_URL = os.getenv('BASE_URL', 'http://localhost:5000/')
+
+#BASE_URL = os.getenv('BASE_URL', 'http://localhost:5000')
 
 def before_all(context):
     """ Executed once before all tests """
