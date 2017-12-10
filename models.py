@@ -1,3 +1,12 @@
+"""
+Product Model that uses Redis
+You must initlaize this class before use by calling inititlize().
+This class looks for an environment variable called VCAP_SERVICES
+to get it's database credentials from. If it cannot find one, it
+tries to connect to Redis on the localhost. If that fails it looks
+for a server name 'redis' to connect to.
+"""
+
 import os
 import json
 import logging
@@ -6,10 +15,33 @@ from redis import Redis
 from cerberus import Validator
 from redis.exceptions import ConnectionError
 
+######################################################################
+# Custom Exceptions
+######################################################################
 
 class DataValidationError(Exception):
     """ Used for an data validation errors when deserializing """
     pass
+
+class DatabaseConnectionError(Exception):
+    pass
+
+class BadRequestError(Exception):
+    pass
+
+class NotFoundError(Exception):
+    pass
+
+
+
+
+
+
+######################################################################
+# Product Model for database
+#   This class must be initialized with use_db(redis) before using
+#   where redis is a value connection to a Redis database
+######################################################################
 
 
 class Product(object):
@@ -96,6 +128,10 @@ class Product(object):
                 'Invalid product: body of request contained bad or no data')
         return self
 
+######################################################################
+#  S T A T I C   D A T A B S E   M E T H O D S
+######################################################################
+
     @staticmethod
     def __next_index():
         """ Generates the next index in a continual sequence """
@@ -138,6 +174,10 @@ class Product(object):
         #Product.index = 0
         # return Product.data
         Product.redis.flushall()
+
+######################################################################
+#  F I N D E R   M E T H O D S
+######################################################################
 
     @staticmethod
     def find(product_id):
@@ -198,6 +238,10 @@ class Product(object):
         """
         # return [p for p in Product.data if p.name == name]
         return Product.__find_by('name', name)
+
+######################################################################
+#  R E D I S   D A T A B A S E   C O N N E C T I O N   M E T H O D S
+######################################################################
 
     @staticmethod
     def connect_to_redis(hostname, port, password):
