@@ -4,21 +4,19 @@ import json
 import unittest
 from mock import patch
 from redis import Redis, ConnectionError
-from models import Product, DataValidationError
+from models import Product, DataValidationError,DatabaseConnectionError,BadRequestError,NotFoundError
 
-VCAP_SERVICES = os.getenv('VCAP_SERVICES', None)
 
-if not VCAP_SERVICES:
-    VCAP_SERVICES = {
-        'rediscloud': [
-            {'credentials': {
-                'password': '',
-                'hostname': '127.0.0.1',
-                'port': '6379'
-            }
-            }
-        ]
-    }
+VCAP_SERVICES = {
+    'rediscloud': [
+        {'credentials': {
+            'password': '',
+            'hostname': '127.0.0.1',
+            'port': '6379'
+        }
+        }
+    ]
+}
 
 ######################################################################
 #  T E S T   C A S E S
@@ -188,7 +186,7 @@ class TestProduct(unittest.TestCase):
 
     def test_passing_connection(self):
         """ Pass in the Redis connection """
-        Product.init_db()
+        Product.init_db(Redis(host='127.0.0.1', port=6379))
         self.assertIsNotNone(Product.redis)
 
     def test_passing_bad_connection(self):
@@ -197,7 +195,7 @@ class TestProduct(unittest.TestCase):
                           Redis(host='127.0.0.1', port=6300))
         self.assertIsNone(Product.redis)
 
-    #@patch.dict(os.environ, {'VCAP_SERVICES': json.dumps(VCAP_SERVICES)})
+    @patch.dict(os.environ, {'VCAP_SERVICES': json.dumps(VCAP_SERVICES)})
     def test_vcap_services(self):
         """ Test if VCAP_SERVICES works """
         Product.init_db()

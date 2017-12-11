@@ -10,8 +10,8 @@ from selenium.webdriver.support import expected_conditions
 
 WAIT_SECONDS = 30
 #BASE_URL = getenv('BASE_URL', None)
-#if not BASE_URL:
-BASE_URL = getenv('BASE_URL', 'http://localhost:5000/')
+# if not BASE_URL:
+BASE_URL = getenv('BASE_URL', 'http://localhost:5000')
 
 
 @given(u'the following products')
@@ -36,7 +36,7 @@ def step_impl(context):
 @when(u'I visit the "home page"')
 def step_impl(context):
     """ Make a call to the base URL """
-    context.driver.get(context.base_url)
+    context.driver.get(context.base_url + '/ui')
 
 
 @then(u'I should see "{message}" in the title')
@@ -124,7 +124,7 @@ def step_impl(context, text_string, element_name):
             text_string
         )
     )
-    #expect(element.get_attribute('value')).to_equal(text_string)
+    # expect(element.get_attribute('value')).to_equal(text_string)
     expect(found).to_be(True)
 
 

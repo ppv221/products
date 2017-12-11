@@ -43,7 +43,7 @@ class TestProductServer(unittest.TestCase):
 
     def test_index(self):
         """ Test the Home Page """
-        resp = self.app.get('/')
+        resp = self.app.get('/ui')
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         # data = json.loads(resp.data)
         self.assertIn('Product', resp.data)
@@ -81,7 +81,7 @@ class TestProductServer(unittest.TestCase):
         resp = self.app.get('/products/0')
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
         data = json.loads(resp.data)
-        self.assertIn('was not found', data['error'])
+        self.assertIn('was not found', data['message'])
 
     def test_create_product(self):
         """ Create a Product """
