@@ -387,7 +387,7 @@ if __name__ == "__main__":
     # product2 = Product(0, 'GE4509', 'Microwave', '50', 'Working', 'Red', 20)
     # product2.save()
     get_product_data()
-    print("Got Here")
+    #print("Got Here")
     app.run(host='0.0.0.0', port=int(PORT), debug=DEBUG)
     # get_product_data()
     #port = int(os.environ.get('PORT', 5000))
