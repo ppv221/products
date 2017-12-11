@@ -306,12 +306,12 @@ $(function () {
             $("#search_results").append('<table class="table-striped">');
             var header = '<tr>'
             header += '<th style="width:10%">ID</th>'
-            header += '<th style="width:40%">Name</th>'
-            header += '<th style="width:40%">Category</th>'
-			header += '<th style="width:40%">Color</th>'
-			header += '<th style="width:40%">Price</th>'
-			header += '<th style="width:40%">Count</th>'
-            header += '<th style="width:10%">Description</th></tr>'
+            header += '<th style="width:20%">Name</th>'
+            header += '<th style="width:10%">Category</th>'
+			header += '<th style="width:10%">Color</th>'
+			header += '<th style="width:10%">Price</th>'
+			header += '<th style="width:20%">Count</th>'
+            header += '<th style="width:20%">Description</th></tr>'
             $("#search_results").append(header);
             for(var i = 0; i < res.length; i++) {
                 product = res[i];

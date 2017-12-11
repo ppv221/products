@@ -19,22 +19,22 @@ from redis.exceptions import ConnectionError
 # Custom Exceptions
 ######################################################################
 
+
 class DataValidationError(Exception):
     """ Used for an data validation errors when deserializing """
     pass
 
+
 class DatabaseConnectionError(Exception):
     pass
+
 
 class BadRequestError(Exception):
     pass
 
+
 class NotFoundError(Exception):
     pass
-
-
-
-
 
 
 ######################################################################
@@ -62,7 +62,7 @@ class Product(object):
         'description': {'type': 'string', 'required': True},
         'color': {'type': 'string', 'required': True},
         'count': {'type': 'integer', 'required': True}
-        }
+    }
     __validator = Validator(schema)
 
     def __init__(self, id=0, name='', category='',
@@ -198,9 +198,9 @@ class Product(object):
     def __find_by(attribute, value):
         """ Generic Query that finds a key with a specific value """
         Product.logger.info('Processing %s query for %s', attribute, value)
-        #if isinstance(value, str):
+        # if isinstance(value, str):
         search_criteria = value.lower()  # make case insensitive
-        #else:
+        # else:
         #print ("INFB")
         #print (value)
         #search_criteria = value
@@ -209,11 +209,11 @@ class Product(object):
             if key != 'index':  # filer out our id index
                 # print("Key:" + key)
                 data = pickle.loads(Product.redis.get(key))
-                #print(data[attribute])
+                # print(data[attribute])
                 # perform case insensitive search on strings
-                #if isinstance(data[attribute], str):
+                # if isinstance(data[attribute], str):
                 test_value = data[attribute].lower()
-                #else:
+                # else:
                 #test_value = data[attribute]
                 # print(search_criteria, test_value)
                 if test_value == search_criteria:
