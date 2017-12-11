@@ -50,6 +50,8 @@ ns = api.namespace('products', description='Product operations')
 # Define the model so that the docs reflect what can be sent
 product_model = api.model('Product', {
 
+    'id': fields.Integer(readOnly=True,
+                         description='The unique id assigned internally by service'),
     'name': fields.String(required=True,
                           description='The name of the Product'),
     'category': fields.String(required=True,
@@ -98,14 +100,14 @@ def healthcheck():
 ######################################################################
 
 
-@app.route('/')
+@app.route('/ui')
 def index():
     """ Return something useful by default
     return jsonify(name='Product Demo REST API Service',
                    version='1.0',
                    url=url_for('list_product', _external=True)), HTTP_200_OK"""
-    print('Hello World')
-    return app.send_static_file('static/index.html')
+    # print('Hello World')
+    return app.send_static_file('index.html')
 
 
 ######################################################################
@@ -221,10 +223,17 @@ class ProductCollection(Resource):
             results = Product.find_by_name(str(name).lower())
         else:
             results = Product.all()
+
+            # for pro in results:
+            #     print(pro.id)
         # app.logger.info('[%s] Products returned', len(results))
         # return make_response(jsonify([p.serialize() for p in results]),
         #                     HTTP_200_OK)
         resultsUpd = [prod.serialize() for prod in results]
+
+        # for prod in resultsUpd:
+        #     print(prod['id'])
+
         return resultsUpd, status.HTTP_200_OK
 
 #------------------------------------------------------------------
@@ -307,9 +316,15 @@ def sell_products(id):
 ######################################################################
 #  U T I L I T Y   F U N C T I O N S
 ######################################################################
-
+@app.route('/products/reset', methods=['DELETE'])
+def products_reset():
+    """ Removes all pets from the database """
+    Product.remove_all()
+    return make_response('', status.HTTP_204_NO_CONTENT)
 
 # load sample data
+
+
 def data_load(payload):
     """ Loads a Product into the database """
     Product(0, 'Asus2500', 'Laptop', '234',
