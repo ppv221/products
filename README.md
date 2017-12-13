@@ -1,7 +1,7 @@
 # products
 [![Build Status](https://travis-ci.org/DevOps-Charlie/products.svg?branch=master)](https://travis-ci.org/DevOps-Charlie/products)
 
-This is the repository for DevOps project at NYU Fall 2017. We will develop a REST API for products as a part of this project.
+This is the repository for DevOps project at NYU Fall 2017. We will develop a REST API for products catalogue as a part of this project.
 
 **To execute the files and run nosetests and code coverage:**
 * vagrant up
